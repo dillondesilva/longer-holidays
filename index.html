@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <script src="https://www.gstatic.com/firebasejs/5.8.0/firebase.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyAG1SwsYCFrv3-2cXRpy02lqFT6ps8YMgE",
+        authDomain: "longer-holidays.firebaseapp.com",
+        databaseURL: "https://longer-holidays.firebaseio.com",
+        projectId: "longer-holidays",
+        storageBucket: "longer-holidays.appspot.com",
+        messagingSenderId: "355234368603"
+      };
+      firebase.initializeApp(config);
+    </script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+        <!-- <link rel="stylesheet" href="styles/debug.css"> -->
+  </head>
+	<body>
+		<section class="section" style="text-align: center;">
+			<div class="container">
+				<h1 class="title" style="text-align: center;">
+					Let's face it
+				</h1>
+				<p class="subtitle" style="text-align:center;">
+					 The holidays are just not <strong>long </strong>enough!
+        </p>
+        <p class="subtitle" style="text-align:center;">
+            Time to make a change!
+         </p>
+        <button class="button" style="background-color:#50C878;color:white;border:white;" onclick='vote()'>I Want Longer Holidays</button>
+        <br>
+        <br>
+        <p class="subtitle" style="text-align:center;" id="count">
+            Votes so far: 
+         </p>
+			</div>
+    </section>
+    <script>
+      var db = firebase.database().ref('count');
+      var countText = document.getElementById("count");
+      db.on('value', function(snapshot) {
+        var count = snapshot.val();
+        countText.innerHTML = 'Votes so far: ' + count;
+      });
+
+      function vote() {
+        if (localStorage.getItem('voted') === null) {
+          localStorage.setItem('voted', 'true');
+          var count = firebase.database().ref();
+          var update = {};
+          db.on('value', function(snapshot) {
+            var newCount = snapshot.val();
+            update = {'count': newCount + 1}
+          }); 
+          count.update(update);
+          swal("One step closer", "Good choice!", "success");
+        } else {
+          swal("You cheeky", "One vote only my friend", "error"); 
+        }
+      }
+    </script>
+	</body>
+</html>
